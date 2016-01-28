@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>game</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<div id="object" ><img src="Resurs/blueships1.png"></div>
+<div id="info"></div>
+<div id="infoBullets"></div>
+<div id="opponent"><img src="Resurs/spaceship.png"></div>
+
+
+<script>
+
+    var divInfo       = document.getElementById('info');
+    var accurateShots = document.getElementById('infoBullets');
+    var obj           = document.getElementById('object');
+    var startPos      = (window.innerWidth / 2 - 75);
+    var countBullets  = 100;
+    var counterOfRightShots = 0;
+    var opponent      = document.getElementById('opponent');
+    var opponentMoving= 0;
+    var flag     = true;
+    var keepPlay = true;
+    var objLeft  = startPos;
+    var objBottom= 50;
+    var step     = 5;
+
+
+    var maxLeft  = 30;
+    var maxRight = window.innerWidth - 160;
+    var maxTop   = window.innerHeight - 300;
+    var maxBot   = 60;
+
+
+    var direction = {
+        left:false,
+        right:false,
+        top:false,
+        bottom:false
+    };
+
+    var isShooting = false;
+
+    document.addEventListener('keydown', function(e){
+        handleDirection(e, true);
+        handleFire(e,true);
+
+        rocketsCreate(e);
+
+
+    },false);
+    document.addEventListener('keyup', function(e){
+        handleDirection(e, false);
+        handleFire(e,false);
+
+    },false);
+    function handleDirection(event, enable) {
+        if (event.keyCode === 37) {
+
+            direction.left = enable;
+
+        } else if (event.keyCode === 39) {
+
+            direction.right = enable;
+
+        } else if (event.keyCode == 38) {
+
+            direction.top = enable
+
+        } else if (event.keyCode == 40) {
+            direction.bottom = enable;
+
+        }
+    }
+    function handleFire(event, enable){
+        if(event.keyCode == 32){
+            isShooting = enable;
+        }
+    }
+    function rocketsCreate(event){
+
+
+        if(event.keyCode == 32 && keepPlay){
+
+            if(countBullets <= 0){
+                console.log('END');                             // svur6vat raketite i krai na igrata
+                var losses = document.createElement('div');
+                losses.className = 'losses';
+                losses.innerHTML = 'YOU LOSSES :(';
+                document.body.appendChild(losses);
+                keepPlay = false;
+                return;
+            }
+
+            countBullets--;
+            divInfo.innerHTML = countBullets + ' bullets';
+
+
+            var xPosition = obj.style.left;
+            var yPosition = obj.style.bottom;
+
+
+            var rocket = document.createElement('div');
+            rocket.className = 'Rocket';
+
+            var rocketImg = document.createElement('IMG');
+
+            rocketImg.setAttribute('src', 'Resurs/rocket.jpg');
+            rocketImg.setAttribute('width', '100%');
+
+            rocket.appendChild(rocketImg);
+
+
+            var numX = xPosition.match(/[0-9]+/g);
+
+            numX = Number(numX[0]);
+
+            numX += 40;
+            rocket.style.left = numX + 'px';
+
+            rocket.style.bottom = yPosition;
+            document.body.appendChild(rocket);
+
+            //rockets.push(rocket);
+
+            var numY = yPosition.match(/[0-9]+/g);
+
+            numY = Number(numY);
+            numY += 100;
+
+
+            rocketsMove(numY,rocket);
+        }
+    }
+
+    //
+    //    setInterval(function(){
+    //
+    //        if(direction.left){
+    //            objLeft -= step;
+    //        }
+    //        if(direction.right){
+    //            objLeft += step;
+    //        }
+    //        if(direction.top){
+    //            objBottom += step;
+    //        }
+    //        if(direction.bottom){
+    //            objBottom -= step;
+    //        }
+    //
+    //        obj.style.bottom = objBottom + 'px';
+    //        obj.style.left = objLeft + 'px';
+    //
+    //    },1000/30);    tova raboti na 30 kadura v sekunda
+
+    function gameLoop(){
+        if(direction.left && objLeft > maxLeft){
+            objLeft -= step;
+        }
+        if(direction.right && objLeft < maxRight){
+            objLeft += step;
+        }
+        if(direction.top && objBottom < maxTop){
+            objBottom += step;
+        }
+        if(direction.bottom && objBottom > maxBot){
+            objBottom -= step;
+        }
+
+        obj.style.bottom = objBottom + 'px';
+        obj.style.left = objLeft + 'px';
+
+        if(flag){                 //  tuk zapo4va dvijenieto na oponenta;
+
+            opponentMoving += 5;
+            opponent.style.left = opponentMoving + 'px';
+            opponent.style.bottom = (window.innerHeight - 200) + 'px';
+            if(opponentMoving >= window.innerWidth - 300){
+                flag = !flag
+            }
+        }else{
+
+            opponentMoving -= 5;
+            opponent.style.left = opponentMoving + 'px';
+            opponent.style.bottom = (window.innerHeight - 200) + 'px';
+
+            if(opponentMoving <= 0){
+                flag = !flag
+            }
+        }
+
+        requestAnimationFrame(gameLoop); // avtomati4no se opredelq refresh-a na ekrana i raboti po plavno
+    }  // dvijenie na samoleta
+        //testtest
+    gameLoop();
+
+
+    function rocketsMove(bottomIndex,rocket){
+
+        var intervalMove = setInterval(function moving(){
+            bottomIndex = Number(bottomIndex);
+
+            bottomIndex += 10;
+
+            rocket.style.bottom = bottomIndex + 'px';
+
+            if(bottomIndex >= 1600){
+                clearInterval(intervalMove);
+                rocket.parentNode.removeChild(rocket);
+                return;
+            }
+
+            var yRocketPX = rocket.style.bottom;
+            var xRocketPX = rocket.style.left;
+            var yOpponentPX = opponent.style.bottom;
+            var xOpponentPX = opponent.style.left;
+
+            var xRocket    = Number(xRocketPX.match(/[0-9]+/g));
+            var yRocket    = Number(yRocketPX.match(/[0-9]+/g));
+            var x1Opponent = Number(xOpponentPX.match(/[0-9]+/g));
+            var x2Opponent = x1Opponent + 150;
+            var y1Opponent = Number(yOpponentPX.match(/[0-9]+/g));
+            var y2Opponent = y1Opponent + 60;
+
+            if(xRocket >= x1Opponent && xRocket <= x2Opponent){
+
+                if(yRocket >= y1Opponent && yRocket <= y2Opponent){
+
+                    counterOfRightShots++;
+                    accurateShots.innerHTML = 'Accurate shots ' + counterOfRightShots;
+                    clearInterval(intervalMove);
+                    rocket.parentNode.removeChild(rocket);
+                }
+                if(counterOfRightShots >= 20 && keepPlay){
+                    keepPlay = false;
+
+
+                    accurateShots.innerHTML = counterOfRightShots + ' Accurate shots';
+                    var win = document.createElement('div');
+                    win.className = 'winDiv';
+                    win.innerHTML = 'YOU WIN ! ! !';
+                    opponent.parentNode.removeChild(opponent);
+                    document.body.appendChild(win)
+                }
+            }
+        },20)
+
+    }
+
+
+</script>
+</body>
+</html>

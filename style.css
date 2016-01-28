@@ -1,0 +1,88 @@
+
+body{
+    background-image: url("Resurs/space.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#object {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+
+}
+img{
+    width: 100%;
+
+}
+.Rocket{
+    width: 17px;
+    position: absolute;
+
+}
+#info{
+    border: 2px solid #000000;
+    width: 300px;
+    height: 80px;
+    border-radius: 50px;
+    border: 1px solid cornflowerblue;
+    text-align: center;
+    background-color: #000000;
+    color: greenyellow;
+    box-shadow: 10px 10px 10px #438acc;
+    font-size: 35px;
+}
+#infoBullets{
+    border: 2px solid #000000;
+    width: 300px;
+    height: 80px;
+    border-radius: 50px;
+    border: 1px solid cornflowerblue;
+    text-align: center;
+    background-color: #000000;
+    color: greenyellow;
+    box-shadow: 10px 10px 10px #438acc;
+    font-size: 35px;
+    position: absolute;
+    top: 0px;
+    right: 10px;
+}
+#opponent {
+
+    width: 150px;
+    height: 60px;
+    position: absolute;
+    left: 100px;
+
+
+
+}
+
+.winDiv{
+    border: 2px solid #000000;
+    width: 500px;
+    height: 160px;
+    border-radius: 80px;
+    border: 1px solid cornflowerblue;
+    text-align: center;
+    background-color: #000000;
+    color: #ffff00;
+    box-shadow: 10px 10px 20px 10px #ffff00;
+    font-size: 45px;
+    position: absolute;
+    top: 50%;
+    right: 40%;
+}
+.losses{
+    width: 350px;
+    height: 100px;
+    border-radius: 80px;
+    text-align: center;
+    background-color: #000000;
+    color: red;
+    box-shadow: 9px 9px 9px 4px red;
+    font-size: 40px;
+    position: absolute;
+    top: 50%;
+    right: 40%;
+}
